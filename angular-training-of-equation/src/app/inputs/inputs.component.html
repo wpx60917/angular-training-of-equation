@@ -1,0 +1,20 @@
+<h2>A x^2+ B x + C</h2>
+<h2>{{valueA.data}}<span> x^2+ </span>{{valueB.data}} <span> x+ </span>{{valueC.data}}</h2>
+
+<div>{{valueA.name}}<span>= </span>{{valueA.data}}</div>
+<div>
+    <label for="data">Value data: </label>
+    <input data="data" [(ngModel)]="valueA.data" placeholder="data">
+  </div>
+
+<div>{{valueB.name}}<span>= </span>{{valueB.data}}</div>
+<div>
+    <label for="data">Value data: </label>
+    <input data="data" [(ngModel)]="valueB.data" placeholder="data">
+  </div>
+
+<div>{{valueC.name}}<span>= </span>{{valueC.data}}</div>
+<div>
+    <label for="data">Value data: </label>
+    <input data="data" [(ngModel)]="valueC.data" placeholder="data">
+  </div>
