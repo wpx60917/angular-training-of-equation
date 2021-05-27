@@ -9,6 +9,15 @@ import * as d3 from "d3";
 })
 export class InputsComponent implements OnInit {
 
+  constructor() { }
+
+  ngOnInit(): void {
+
+    this.createSvg();
+    // this.drawPlot();
+  }
+
+
 
   valueA: Value = {
     data: 0,
@@ -27,6 +36,8 @@ export class InputsComponent implements OnInit {
 
 
   
+
+
   private svg : any;
 
   
@@ -38,7 +49,7 @@ export class InputsComponent implements OnInit {
       this.svg = d3.select("#container")
       .append("svg")
       .attr("viewBox","0 0 200 200");
-      svg.selectAll(".coordinates").data(d3.range(2))
+      this.svg.selectAll(".coordinates").data(d3.range(2))
       .enter()
       .append("path")
       .attr("class","coordinates")
@@ -49,7 +60,7 @@ export class InputsComponent implements OnInit {
         : "M100,0v200"
       });
       //path
-      svg
+      this.svg
       .append("g")
       .attr("transform","translate(100,100) scale(1,-1)")
       .append("path")
@@ -58,33 +69,27 @@ export class InputsComponent implements OnInit {
       .attr("fill","transparent")
       .transition()
       .delay(250)
-      .duration(1500);
-      // .call(animate);     
+      .duration(1500)
+      .call(this.animate(svg));     
     }
 
     
 
-  constructor() { }
 
-  ngOnInit(): void {
 
-    this.createSvg();
-    // this.drawPlot();
+  animate(this: any, selection: any){
+      this
+      .attrTween("d",() =>{
+        return (t: number) =>{
+         return "M"+this.points.slice(0,Math.max(1,t*this.points.length|0)).join("L");
+        }
+      }).each("end",() =>{
+        d3.select(this)
+          .transition()
+          .delay(250)
+          .duration(1500);
+      })
   }
-
-  // animate(this: any, selection: any){
-  //   this
-  //   .attrTween("d",function(){
-  //     return function(t: number){
-  //      return "M"+this.points.slice(0,Math.max(1,t*this.points.length|0)).join("L");
-  //     }
-  //   }).each("end",() =>{
-  //     d3.select(this)
-  //       .transition()
-  //       .delay(250)
-  //       .duration(1500);
-  //   })
-  // }
 
   createPoints(a: number,b: number,c: number,rangeX: number[],step: number){
     return Array.apply(null,Array((rangeX[1]-rangeX[0])/step|0 + 1))
