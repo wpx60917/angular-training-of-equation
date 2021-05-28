@@ -34,8 +34,16 @@ export class InputsComponent implements OnInit {
     data: 5,
     name: 'C'
   };
+ 
+  warn(a:number,b:number,c:number){
+    if (a>100||a<-100||b>100||b<-100||c>100||c<-100) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
-
+   warncheck:boolean = this.warn(this.valueA.data,this.valueB.data,this.valueC.data);
 
 
 
