@@ -14,26 +14,20 @@ export class InputsComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.createSvg();
-    // this.drawPlot();
+    // this.createSvg();
+    this.initSvg();
+    this.initAxisPath();
   }
 
 
 
-  valueA: Value = {
-    data: 5,
-    name: 'A'
+  valueInput: Value = {
+    a: -1,
+    b: 0,
+    c: 80
   };
 
-  valueB: Value = {
-    data: 5,
-    name: 'B'
-  };
 
-  valueC: Value = {
-    data: 5,
-    name: 'C'
-  };
  
   warn(a:number,b:number,c:number){
     if (a>100||a<-100||b>100||b<-100||c>100||c<-100) {
@@ -43,35 +37,61 @@ export class InputsComponent implements OnInit {
     }
   }
 
-   warncheck:boolean = this.warn(this.valueA.data,this.valueB.data,this.valueC.data);
+   warncheck:boolean = this.warn(this.valueInput.a,this.valueInput.b,this.valueInput.c);
+   
 
 
 
   private svg : any;
-  // private drawpic = svg;
+  
   
 
-    private points = this.createPoints(this.valueA.data,this.valueB.data,this.valueC.data,[-10,10],0.5);
+    private points = this.createPoints(this.valueInput.a,this.valueInput.b,this.valueInput.c,[-50,50],0.5);
     
-    private createSvg(): void {
-      //coordinates
-      this.svg = d3.select("#container")
-      .append("svg")
-      .attr("viewBox","0 0 200 200");
-      this.svg.selectAll(".coordinates").data(d3.range(2))
-      .enter()
-      .append("path")
-      .attr("class","coordinates")
-      .attr("stroke","black")
-      .attr("d",function(d: any,i: any){
-        return i
-        ? "M0,100h200"
-        : "M100,0v200"
-      });
+    // private createSvg(): void {
+    //   //coordinates
+    //   this.svg = d3.select("#container")
+    //   .append("svg")
+    //   .attr("viewBox","0 0 200 200");
+    //   this.svg.selectAll(".coordinates").data(d3.range(2))
+    //   .enter()
+    //   .append("path")
+    //   .attr("class","coordinates")
+    //   .attr("stroke","black")
+    //   .attr("d",function(d: any,i: any){
+    //     return i
+    //     ? "M0,100h200"
+    //     : "M100,0v200"
+    //   });
+         
+    // }
+
+    xScale: any;
+    yScale: any;
+    padding: number = 10;
+
+
+    initSvg() {
+      this.svg = d3.select("#container").append('svg')
+        .attr('width', 600)
+        .attr('height', 600)
+    }
+  
+    initAxisPath() {
+      //axis
+      this.xScale = d3.scaleLinear().domain([-50, 50]).range([0 + this.padding, 600 - this.padding]);
+      this.yScale = d3.scaleLinear().domain([50, -50]).range([0 + this.padding, 600 - this.padding]);
+      this.svg.append('g')
+        .attr('transform', 'translate('+ 0 +','+ this.yScale(0) +')')
+        .call(d3.axisBottom(this.xScale));
+      
+      this.svg.append('g')
+        .attr('transform', 'translate('+ this.xScale(0) +','+ 0 +')')
+        .call(d3.axisLeft(this.yScale));
+
       //path
-      this.svg
-      .append("g")
-      .attr("transform","translate(100,100) scale(1,-1)")
+      this.svg.append("g")
+      .attr("transform","translate("+this.xScale(0)+","+this.yScale(0)+") scale(1,-1)")
       .append("path")//路徑綁定
       .attr("stroke-width","2")
       .attr("stroke","black")
@@ -88,10 +108,8 @@ export class InputsComponent implements OnInit {
           .transition()
           .delay(250)
           .duration(1500);
-      });   
+      });
     }
-
-    
 
 
 
@@ -115,6 +133,19 @@ export class InputsComponent implements OnInit {
       var x = rangeX[0]+i*step;
       return [x,a * x * x + b * x + c];
     })
+  }
+
+  valueChange(valueInput: any) {
+    console.log(this.valueInput);
+    this.warncheck = this.warn(this.valueInput.a,this.valueInput.b,this.valueInput.c);
+    if (this.warncheck==true) {
+      this.svg.selectAll("*").remove();
+    } else {
+      this.svg.selectAll("*").remove();
+      this.points = this.createPoints(this.valueInput.a,this.valueInput.b,this.valueInput.c,[-50,50],0.5);
+      this.initAxisPath();
+    }
+    
   }
 
 

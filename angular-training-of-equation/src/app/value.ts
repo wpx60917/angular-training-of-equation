@@ -1,4 +1,5 @@
 export interface Value {
-    data: number;
-    name: string;
+    a: number;
+    b: number;
+    c: number;
   }

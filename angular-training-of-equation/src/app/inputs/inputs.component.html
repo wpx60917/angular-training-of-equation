@@ -1,25 +1,25 @@
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <h2>y= A x^2+ B x + C</h2>
-<h2><span> y= </span>{{valueA.data}}<span> x^2+ </span>{{valueB.data}} <span> x+ </span>{{valueC.data}}</h2>
+<h2><span> y= </span>{{valueInput.a}}<span> x^2+ </span>{{valueInput.b}} <span> x+ </span>{{valueInput.c}}</h2>
 <div class="warning" *ngIf="warncheck">Pls input number (between-100&100)</div>
 <!-- valueA.data>100||valueA.data<-100||valueB.data>100||valueB.data<-100||valueC.data>100||valueC.data<-100 -->
 
-<div>{{valueA.name}}<span>= </span>{{valueA.data}}</div>
+<div>A<span>= </span>{{valueInput.a}}</div>
 <div>
-    <label for="data">Value data: </label>
-    <input type="number" data="data" [(ngModel)]="valueA.data" placeholder="data">
+    <label for="a">Value data: </label>
+    <input (change)="valueChange(valueInput)" type="number" a="a" [(ngModel)]="valueInput.a" placeholder="a">
 </div>
 
-<div>{{valueB.name}}<span>= </span>{{valueB.data}}</div>
+<div>B<span>= </span>{{valueInput.b}}</div>
 <div>
-    <label for="data">Value data: </label>
-    <input type="number" data="data" [(ngModel)]="valueB.data" placeholder="data">
+    <label for="b">Value data: </label>
+    <input  (change)="valueChange(valueInput)" type="number" b="b" [(ngModel)]="valueInput.b" placeholder="b">
  </div>
 
-<div>{{valueC.name}}<span>= </span>{{valueC.data}}</div>
+<div>C<span>= </span>{{valueInput.c}}</div>
 <div>
-    <label for="data">Value data: </label>
-    <input type="number" data="data" [(ngModel)]="valueC.data"  placeholder="data">
+    <label for="c">Value data: </label>
+    <input  (change)="valueChange(valueInput)" type="number" c="c" [(ngModel)]="valueInput.c"  placeholder="c">
 </div>
   <!-- <svg width=500 height=500></svg> -->
   
