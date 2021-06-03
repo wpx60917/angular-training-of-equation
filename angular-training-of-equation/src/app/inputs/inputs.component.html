@@ -1,106 +1,41 @@
 <script src="https://d3js.org/d3.v4.min.js"></script>
-<h2>y= A x^2+ B x + C</h2>
-<h2><span> y= </span>{{valueInput.a}}<span> x^2+ </span>{{valueInput.b}} <span> x+ </span>{{valueInput.c}}</h2>
-<div class="warning" *ngIf="warncheck">Pls input number (between-100&100)</div>
-<!-- valueA.data>100||valueA.data<-100||valueB.data>100||valueB.data<-100||valueC.data>100||valueC.data<-100 -->
 
-<div>A<span>= </span>{{valueInput.a}}</div>
-<div>
-    <label for="a">Value data: </label>
-    <input (change)="valueChange(valueInput)" type="number" a="a" [(ngModel)]="valueInput.a" placeholder="a">
+<div class="component">
+    <div class="info">
+        <div class="equation">
+            <h2>y= A x<sup>2</sup>+ B x + C</h2>
+            <h2><span> y= </span>{{valueInput.a}}<span> x<sup>2</sup>+ </span>{{valueInput.b}} <span> x+ </span>{{valueInput.c}}</h2>
+            <div class="warning" *ngIf="warncheck">Pls input number (between-100&100)</div>
+            <!-- valueA.data>100||valueA.data<-100||valueB.data>100||valueB.data<-100||valueC.data>100||valueC.data<-100 -->
+        </div>
+        
+    
+        <div class="input">
+            <div>A<span>= </span>{{valueInput.a}}</div>
+            <div>
+                <label for="a">Value data: </label>
+                <input (change)="valueChange(valueInput)" type="number" a="a" [(ngModel)]="valueInput.a" placeholder="a">
+            </div>
+    
+            <div>B<span>= </span>{{valueInput.b}}</div>
+            <div>
+                <label for="b">Value data: </label>
+                <input  (change)="valueChange(valueInput)" type="number" b="b" [(ngModel)]="valueInput.b" placeholder="b">
+            </div>
+    
+            <div>C<span>= </span>{{valueInput.c}}</div>
+            <div>
+                <label for="c">Value data: </label>
+                <input  (change)="valueChange(valueInput)" type="number" c="c" [(ngModel)]="valueInput.c"  placeholder="c">
+            </div>
+        </div>
+
+        <div class="graph">
+            <h2>GRAPH</h2>
+            <div id="container"></div>
+        </div>
+    </div>
+
 </div>
 
-<div>B<span>= </span>{{valueInput.b}}</div>
-<div>
-    <label for="b">Value data: </label>
-    <input  (change)="valueChange(valueInput)" type="number" b="b" [(ngModel)]="valueInput.b" placeholder="b">
- </div>
 
-<div>C<span>= </span>{{valueInput.c}}</div>
-<div>
-    <label for="c">Value data: </label>
-    <input  (change)="valueChange(valueInput)" type="number" c="c" [(ngModel)]="valueInput.c"  placeholder="c">
-</div>
-  <!-- <svg width=500 height=500></svg> -->
-  
-<h2>diagram</h2>
-<figure id="container"></figure>
-
-<!-- <script>
-var w = 600,h = 400,padding = 30;
-
-  //random data
-  var dataset = [];
-  var numDataPoints = 100; //總共100個點
-  var xRange = Math.random() * 500;
-  var yRange = Math.random() * 1000;
-  for (var i = 0; i < numDataPoints; i++){
-      var num1 = Math.floor(Math.random() * xRange);
-      var num2 = Math.floor(Math.random() * yRange);
-      dataset.push([num1,num2])
-  }//和更早之前一樣，我們用假的資料來做範例
-  console.table(dataset)
-  
-  
-  var Xmax = d3.max(dataset, function(d){return d[0]}),
-      Xmin = d3.min(dataset, function(d){return d[0]}),
-      Ymax = d3.max(dataset, function(d){return d[1]}),
-      Ymin = d3.min(dataset, function(d){return d[1]})
-      //取得X,Y的最大及最小值
-  
-  var xScale = d3.scale.linear() //製作線性尺度
-      .domain([0, Xmax]) //輸入的範圍
-      .range([padding , w - padding]) //輸出的範圍
-  
-  
-  var yScale = d3.scale.linear()
-      .domain([0, Ymax])
-      .range([ h - padding ,padding])
-  
-  
-  
-  
-  var svg = d3.select('.demo').append('svg').attr({'width': w,'height': h}) //增加SVG容器
-  
-      svg.selectAll('circle').data(dataset).enter() //插入資料
-      .append('circle') //增加圓形物件
-      .attr({
-          'cx': function(d){return xScale(d[0])}, //利用尺度算出圓心x位置
-          'cy': function(d){return yScale(d[1])}, //同上算出y
-          'r': '2px', //圓心大小
-          'fill': 'black' //填色
-      });
-  
-      svg.selectAll('text').data(dataset).enter() //插入資料
-      .append('text') //增加文字區塊
-      .text(function(d){ return d[0]+ ',' + d[1]}) //補上坐標文字
-      .attr({
-          'x': function(d){return xScale(d[0])},
-          'y': function(d){return yScale(d[1])},
-          'fill': 'red', //填滿紅色
-          'font-size': '10px' //文字大小
-      });
-  
-  //Axis
-  var xAxis = d3.svg.axis().scale(xScale) //增加軸線物件，並套用尺度(x)
-      .orient("bottom") //標示位置
-      .ticks(6) //刻度數量
-  
-  var yAxis = d3.svg.axis().scale(yScale) //增加軸線物件，並套用尺度(y)
-      .orient("left") //標示位置
-      .ticks(10) //刻度數量
-  
-  //刻度化標籤，這範例不使用
-  // var formatAsAxis = d3.format('.1%');
-  // xAxis.tickFormat(formatAsAxis);
-  //刻度化標籤
-  
-  
-  svg.append('g').attr('class', 'axis') //增加一個群組並加上class="axis"
-      .attr('transform', 'translate(0, '+ (h - padding) +')') //移動到下方
-      .call(xAxis); //將軸線匯入
-  
-  svg.append('g').attr('class', 'axis')
-      .attr('transform', 'translate('+ (padding) +')', 0) //移動到左方
-      .call(yAxis);
-</script> -->

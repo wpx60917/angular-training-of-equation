@@ -44,6 +44,8 @@ export class InputsComponent implements OnInit {
 
   private svg : any;
   
+  private rangeX: any;
+  private rangeY: any;
   
 
     private points = this.createPoints(this.valueInput.a,this.valueInput.b,this.valueInput.c,[-50,50],0.5);
@@ -73,14 +75,14 @@ export class InputsComponent implements OnInit {
 
     initSvg() {
       this.svg = d3.select("#container").append('svg')
-        .attr('width', 600)
-        .attr('height', 600)
+        .attr('width', 300)
+        .attr('height', 300)
     }
   
     initAxisPath() {
       //axis
-      this.xScale = d3.scaleLinear().domain([-50, 50]).range([0 + this.padding, 600 - this.padding]);
-      this.yScale = d3.scaleLinear().domain([50, -50]).range([0 + this.padding, 600 - this.padding]);
+      this.xScale = d3.scaleLinear().domain(this.rangeX).range([0 + this.padding, 300 - this.padding]);
+      this.yScale = d3.scaleLinear().domain(this.rangeY).range([0 + this.padding, 300 - this.padding]);
       this.svg.append('g')
         .attr('transform', 'translate('+ 0 +','+ this.yScale(0) +')')
         .call(d3.axisBottom(this.xScale));
@@ -127,12 +129,24 @@ export class InputsComponent implements OnInit {
   //     })
   // }
 
+  setRange(x: any, y: any) {
+    this.rangeX = x;
+    this.rangeY = y;
+  }
+  
+
   createPoints(a: number,b: number,c: number,rangeX: number[],step: number){
-    return Array.apply(null,Array((rangeX[1]-rangeX[0])/step|0 + 1))
+    let maxY=10;
+
+    const arr = Array.apply(null,Array((rangeX[1]-rangeX[0])/step|0 + 1))
     .map(function(d,i){
-      var x = rangeX[0]+i*step;
-      return [x,a * x * x + b * x + c];
-    })
+      const x = rangeX[0]+i*step;
+      const y=a * x * x + b * x + c;
+      maxY = Math.max(maxY, Math.abs(y));
+      return [x,y];
+    });
+    this.setRange([-maxY, maxY], [maxY, -maxY]);
+    return arr;
   }
 
   valueChange(valueInput: any) {
@@ -142,7 +156,7 @@ export class InputsComponent implements OnInit {
       this.svg.selectAll("*").remove();
     } else {
       this.svg.selectAll("*").remove();
-      this.points = this.createPoints(this.valueInput.a,this.valueInput.b,this.valueInput.c,[-50,50],0.5);
+      this.points = this.createPoints(this.valueInput.a,this.valueInput.b,this.valueInput.c,[-10,10],0.5);
       this.initAxisPath();
     }
     
@@ -151,3 +165,7 @@ export class InputsComponent implements OnInit {
 
 
 }
+function maxY(maxY: any, arg1: number): any {
+  throw new Error('Function not implemented.');
+}
+

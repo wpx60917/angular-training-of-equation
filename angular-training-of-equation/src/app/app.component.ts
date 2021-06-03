@@ -9,5 +9,5 @@ import * as d3 from "d3";
 })
 
 export class AppComponent {
-  title = 'training-of-equation';
+  title = 'Quadratic equation';
 }

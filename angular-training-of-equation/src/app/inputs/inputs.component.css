@@ -1,4 +1,20 @@
-#container {
+  *{
+    /* border: solid 1px; */
+  }
+  .component{
+    width: 100%;
+    position: relative;
+  }
+  .info{
+    width: 100%;
+    padding: 1em;
+    display: inline-block;
+  }
+  .graph{
+    width: 100%;
+  }
+
+  #container {
     width:300px;
     height:300px;
   }
